@@ -24,7 +24,6 @@ body {
     word-wrap: break-word;
     padding: 3px 10px;
     border-bottom: 1px solid $color-light-gray;
-    width: calc(100% / 9);
     flex: 0 0 auto;
     box-sizing: border-box;
     &:first-of-type {
@@ -54,7 +53,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 20px 0 10px;
   }
 }
 
@@ -92,9 +91,12 @@ body {
 }
 
 .filter {
+  &__row {
+    margin-right: 30px;
+  }
   &__inputs {
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
     margin-bottom: 10px;
   }
   &__header {

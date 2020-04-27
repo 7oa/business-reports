@@ -1,5 +1,6 @@
 export default class TableView {
-  constructor() {
+  constructor(props) {
+    this.columns = props.columns;
     this.tableHeadSelector = "js-table-head";
     this.tableBodySelector = "js-table-body";
     this.paginationSelector = "js-table-pagination";
@@ -12,7 +13,8 @@ export default class TableView {
     const sortSelector = this.sorFieldSelector;
     return `
       <div class="table__col${column.sort ? ` ${sortSelector}` : ""}" 
-        data-field="${column.field}">
+        data-field="${column.field}"
+        style="width:${100 / +this.columns}%">
         ${column.title}
       </div>
     `;
@@ -28,7 +30,7 @@ export default class TableView {
 
   getColumnTemplate(item) {
     return `
-      <div class="table__col">
+      <div class="table__col" style="width: ${100 / +this.columns}%">
         ${item}
       </div>
     `;

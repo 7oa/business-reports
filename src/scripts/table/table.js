@@ -8,7 +8,9 @@ export default class Table {
   constructor(props) {
     this.tableElement = document.querySelector(props.element);
     this.columns = props.columns;
-    this.view = new TableView();
+    this.view = new TableView({
+      columns: this.columns.length,
+    });
     this.model = new TableModel({
       data: props.data,
       itemsPerPage: props.itemsPerPage,
