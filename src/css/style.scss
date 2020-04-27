@@ -1,0 +1,230 @@
+$color-text: #333;
+$color-light-gray: rgba(34, 36, 38, 0.15);
+$color-accent: #00b5ad;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: $color-text;
+}
+.table {
+  width: 100%;
+  max-width: 1600px;
+
+  &__head {
+    .table__col {
+      padding: 5px 10px;
+      border-top: 1px solid $color-light-gray;
+      background-color: #eee;
+      font-weight: bold;
+    }
+  }
+
+  &__col {
+    word-wrap: break-word;
+    padding: 3px 10px;
+    border-bottom: 1px solid $color-light-gray;
+    width: calc(100% / 9);
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    &:first-of-type {
+      flex-grow: 1;
+      border-left: 1px solid $color-light-gray;
+    }
+    &:last-of-type {
+      border-right: 1px solid $color-light-gray;
+    }
+    img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+  }
+
+  &__row {
+    display: flex;
+
+    &:nth-child(even) {
+      .table__col {
+        background-color: #f9fafb;
+      }
+    }
+  }
+
+  &__pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+  }
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__item {
+    border: 1px solid $color-light-gray;
+    margin-right: 5px;
+    padding: 5px;
+    cursor: pointer;
+    color: $color-text;
+    box-sizing: border-box;
+    min-width: 27px;
+    display: flex;
+    justify-content: center;
+    &:hover {
+      background-color: $color-light-gray;
+    }
+    &.active {
+      background-color: $color-accent;
+      color: white;
+    }
+  }
+  &__dots {
+    margin-right: 5px;
+    padding: 5px;
+    min-width: 27px;
+    display: flex;
+    justify-content: center;
+    color: $color-text;
+    box-sizing: border-box;
+  }
+}
+
+.filter {
+  &__inputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  &__header {
+    margin-bottom: 5px;
+  }
+  &__title {
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 3px;
+  }
+  &__description {
+    font-size: 12px;
+    display: none;
+  }
+  &__buttons {
+    margin-top: 10px;
+  }
+  &__button {
+    background-color: $color-accent;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    margin: 0;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+}
+
+.filter-input {
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 23px;
+  &__label {
+    box-sizing: border-box;
+    width: 30px;
+    display: inline-block;
+    font-size: 12px;
+    background-color: $color-light-gray;
+    text-align: right;
+    padding-right: 5px;
+    height: 100%;
+    color: #666;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  &__input {
+    box-sizing: border-box;
+    border: 1px solid $color-light-gray;
+    height: 100%;
+    width: 70px;
+    margin: 0;
+    padding: 3px 5px;
+    -moz-appearance: textfield;
+    &::-webkit-inner-spin-button {
+      display: none;
+    }
+  }
+}
+
+.items-per-page {
+  display: flex;
+  &__label {
+    display: inline-block;
+    font-size: 12px;
+    background-color: $color-light-gray;
+    text-align: right;
+    padding: 0 5px 0 10px;
+    height: 28px;
+    color: #666;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  &__select {
+    border: 1px solid $color-light-gray;
+    width: 70px;
+    margin: 0;
+    padding: 1px 5px;
+    box-sizing: border-box;
+  }
+}
+.current-filters {
+  display: flex;
+  flex-wrap: wrap;
+  &__item {
+    font-size: 12px;
+    border: 2px solid $color-accent;
+    margin: 0 0 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+  }
+  &__button {
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: $color-accent;
+    color: white;
+    border: none;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 20px;
+  }
+}
+
+.js-sort {
+  position: relative;
+  cursor: pointer;
+}
+.js-sort:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+.js-sort[data-sort="asc"]:after {
+  content: "▲";
+}
+.js-sort[data-sort="desc"]:after {
+  content: "▼";
+}

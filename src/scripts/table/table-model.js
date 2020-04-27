@@ -1,0 +1,83 @@
+import { sortFunc } from "../utils/utils.js";
+
+export default class TableModel {
+  constructor(props) {
+    this.initialData = [...props.data];
+    this.data = [...props.data];
+    this.sortOrder = "";
+    this.sortField = "";
+    this.filter = [];
+    this.currentPage = 1;
+    this.itemsPerPage = props.itemsPerPage;
+  }
+
+  setSort(field, orderBy) {
+    this.sortOrder = orderBy;
+    this.sortField = field;
+    this.updateData();
+  }
+
+  setFilter(filter) {
+    this.filter = filter;
+    this.updateData();
+  }
+
+  updateData() {
+    const sortedData = this.sortData([...this.initialData]);
+    this.data = this.filterData(sortedData);
+  }
+
+  sortData(data) {
+    let sortedData = [];
+    const field = this.sortField;
+    const orderBy = this.sortOrder;
+    switch (orderBy) {
+      case "asc":
+        sortedData = data.sort(sortFunc(field, "asc"));
+        break;
+      case "desc":
+        sortedData = data.sort(sortFunc(field, "desc"));
+        break;
+      case "":
+        sortedData = data;
+        break;
+    }
+    return sortedData;
+  }
+
+  filterData(data) {
+    let filteredData = [];
+    const filters = this.filter;
+    filteredData = data.filter((el) => {
+      return filters.every((filter) => {
+        return (
+          parseInt(el[filter.name]) >= parseInt(filter.min) &&
+          parseInt(el[filter.name]) <= parseInt(filter.max)
+        );
+      });
+    });
+    return filteredData;
+  }
+
+  getNewSortOrder(currentSortOrder) {
+    let newSortOrder;
+    const orders = ["asc", "desc", ""];
+    const index = orders.indexOf(currentSortOrder);
+
+    if (index === orders.length - 1) {
+      newSortOrder = orders[0];
+    } else {
+      newSortOrder = orders[index + 1];
+    }
+
+    return newSortOrder;
+  }
+
+  getData() {
+    const itemsPerPage = +this.itemsPerPage;
+    const currentPage = +this.currentPage;
+    const dataFrom = (currentPage - 1) * itemsPerPage;
+    const dataTo = dataFrom + itemsPerPage;
+    return this.data.slice(dataFrom, dataTo);
+  }
+}
