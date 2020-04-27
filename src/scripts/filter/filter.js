@@ -167,7 +167,9 @@ export default class Filter {
   }
 
   init() {
-    this.renderFilters();
-    this.bindEvents();
+    if (this.getFilters().length > 0) {
+      this.renderFilters();
+      this.bindEvents();
+    }
   }
 }
