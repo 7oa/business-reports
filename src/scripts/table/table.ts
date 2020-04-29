@@ -23,7 +23,7 @@ export default class Table implements ITable {
   }
 
   get tableBodyElement() {
-    return this.rootElement.querySelector(`.${this.view.tableHeadSelector}`);
+    return this.rootElement.querySelector(`.${this.view.tableBodySelector}`);
   }
 
   get tableElement() {
