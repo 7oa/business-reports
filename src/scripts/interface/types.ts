@@ -29,8 +29,6 @@ export type TableProps = {
   columns: Column[];
   tableView: ITableView;
   tableModel: ITableModel;
-  pagination?: IPagination;
-  filter?: IFilter;
 };
 
 export type PaginationProps = {

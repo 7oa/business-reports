@@ -1,6 +1,6 @@
 import { imageLink } from "../utils/image-link";
-import { Column, TableProps } from "../interface/types";
-import { ITable, IPagination, IFilter, ITableModel, ITableView } from "../interface/interface";
+import { Column, TableProps, SelectedFilter } from "../interface/types";
+import { ITable, ITableModel, ITableView } from "../interface/interface";
 
 export default class Table implements ITable {
   tableElement: HTMLElement;
@@ -8,8 +8,6 @@ export default class Table implements ITable {
   columns: Column[];
   view: ITableView;
   model: ITableModel;
-  pagination: IPagination;
-  filter: IFilter;
 
   constructor(props: TableProps) {
     this.tableElement = props.tableElement;
@@ -17,10 +15,9 @@ export default class Table implements ITable {
     this.columns = props.columns;
     this.view = props.tableView;
     this.model = props.tableModel;
-    this.pagination = props.pagination;
-    this.filter = props.filter;
     this.init();
   }
+
   get elements() {
     return {
       tableHead: this.tableElement.querySelector(`.${this.view.tableHeadSelector}`),
@@ -50,19 +47,21 @@ export default class Table implements ITable {
         this.setSort(sortField, newSortOrder);
       }
     });
-    this.tableElement.addEventListener("filterChange", () => {
-      this.setFilter();
+    this.tableElement.addEventListener("filterChange", (evt: CustomEvent) => {
+      this.setFilter(evt.detail.filter);
     });
-    this.tableElement.addEventListener("pageChange", () => {
+    this.tableElement.addEventListener("pageChange", (evt: CustomEvent) => {
+      this.setPage(evt.detail.page);
       this.renderData();
     });
-    this.tableElement.addEventListener("itemsPerPageChange", () => {
+    this.tableElement.addEventListener("itemsPerPageChange", (evt: CustomEvent) => {
+      this.setPage(evt.detail.page);
+      this.setItemsPerPage(evt.detail.itemsPerPage);
       this.renderData();
     });
   }
 
-  setFilter() {
-    const filter = this.filter.getFilter();
+  setFilter(filter: SelectedFilter[]) {
     this.model.setFilter(filter);
     const dataLength = this.model.data.length;
     this.tableElement.dispatchEvent(
@@ -117,11 +116,6 @@ export default class Table implements ITable {
   }
 
   renderData() {
-    if (this.pagination) {
-      this.setPage(this.pagination.getCurrentPage());
-      this.setItemsPerPage(this.pagination.getItemsPerPage());
-    }
-
     const data = this.model.getData();
     const template = data
       .map((row) => {

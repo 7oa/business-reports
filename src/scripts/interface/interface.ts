@@ -14,17 +14,20 @@ export interface IReport {
 }
 
 export interface IReportView {
+  tableSelector: string;
   getTemplate(): string;
 }
 
 export interface ITable {
   tableElement: HTMLElement;
-  pagination?: IPagination;
-  filter?: IFilter;
+  tableSelector: string;
+  columns: Column[];
   view: ITableView;
   model: ITableModel;
+  bindEvents(): void;
   init(): void;
 }
+
 export interface ITableView {
   tableHeadSelector: string;
   tableBodySelector: string;
@@ -47,10 +50,11 @@ export interface ITableModel {
 }
 
 export interface IPagination {
+  tableElement: HTMLElement;
+  paginationSelector: string;
   view: IPaginationView;
   model: IPaginationModel;
-  getCurrentPage(): number;
-  getItemsPerPage(): number;
+  bindEvents(): void;
   init(): void;
 }
 
@@ -72,7 +76,11 @@ export interface IPaginationModel {
 }
 
 export interface IFilter {
-  getFilter(): SelectedFilter[];
+  tableElement: HTMLElement;
+  filterSelector: string;
+  view: IFilterView;
+  model: IFilterModel;
+  bindEvents(): void;
   init(): void;
 }
 

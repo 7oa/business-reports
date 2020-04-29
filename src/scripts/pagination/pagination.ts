@@ -27,7 +27,7 @@ export default class Pagination implements IPagination {
     };
   }
 
-  bindPaginationEvent() {
+  bindEvents() {
     this.tableElement.addEventListener("click", (evt) => {
       const target = evt.target as HTMLElement;
       if (target.classList.contains(this.view.paginationItemSelector)) {
@@ -71,13 +71,26 @@ export default class Pagination implements IPagination {
   setPage(page: number) {
     this.model.setPage(page);
     this.renderPagination();
-    this.tableElement.dispatchEvent(new CustomEvent("pageChange"));
+    this.tableElement.dispatchEvent(
+      new CustomEvent("pageChange", {
+        detail: {
+          page,
+        },
+      })
+    );
   }
 
   setItemsPerPage(itemsPerPage: number) {
     this.model.setItemsPerPage(itemsPerPage);
     this.renderPagination();
-    this.tableElement.dispatchEvent(new CustomEvent("itemsPerPageChange"));
+    this.tableElement.dispatchEvent(
+      new CustomEvent("itemsPerPageChange", {
+        detail: {
+          itemsPerPage,
+          page: this.getCurrentPage(),
+        },
+      })
+    );
   }
 
   setDataLength(value: number) {
@@ -106,7 +119,7 @@ export default class Pagination implements IPagination {
   init() {
     this.renderPagination();
     this.renderItemsPerPage();
-    this.bindPaginationEvent();
+    this.bindEvents();
     this.bindItemsPerPageEvents();
   }
 }

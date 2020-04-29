@@ -32,7 +32,7 @@ export default class Report implements IReport {
 
   renderTable() {
     return this.data.getData(this.url).then((data: []) => {
-      const pagination = new Pagination({
+      new Pagination({
         tableElement: this.tableElement,
         paginationSelector: this.view.paginationSelector,
         itemsPerPageSelector: this.view.itemsPerPageSelector,
@@ -43,7 +43,7 @@ export default class Report implements IReport {
         }),
       });
 
-      const filter = new Filter({
+      new Filter({
         tableElement: this.tableElement,
         filterSelector: this.view.filterSelector,
         filterView: new FilterView(),
@@ -64,8 +64,6 @@ export default class Report implements IReport {
           data,
           itemsPerPage: this.itemsPerPage,
         }),
-        pagination,
-        filter,
       });
     });
   }

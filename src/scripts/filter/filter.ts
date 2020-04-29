@@ -144,7 +144,13 @@ export default class Filter implements IFilter {
   setFilter(filter: SelectedFilter[]) {
     if (JSON.stringify(filter) !== JSON.stringify(this.getFilter())) {
       this.model.setFilter(filter);
-      this.tableElement.dispatchEvent(new CustomEvent("filterChange"));
+      this.tableElement.dispatchEvent(
+        new CustomEvent("filterChange", {
+          detail: {
+            filter: this.getFilter(),
+          },
+        })
+      );
       this.renderCurrentFilter();
     }
   }
@@ -159,7 +165,13 @@ export default class Filter implements IFilter {
 
   removeFilter(name) {
     this.model.removeFilter(name);
-    this.tableElement.dispatchEvent(new CustomEvent("filterChange"));
+    this.tableElement.dispatchEvent(
+      new CustomEvent("filterChange", {
+        detail: {
+          filter: this.getFilter(),
+        },
+      })
+    );
     this.renderCurrentFilter();
   }
 
