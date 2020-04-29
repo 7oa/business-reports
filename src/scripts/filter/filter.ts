@@ -2,40 +2,46 @@ import { IFilter, IFilterView, IFilterModel } from "../interface/interface";
 import { FilterProps, SelectedFilter, Filter as FilterType } from "../interface/types";
 
 export default class Filter implements IFilter {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   filterSelector: string;
   view: IFilterView;
   model: IFilterModel;
 
   constructor(props: FilterProps) {
-    this.tableElement = props.tableElement;
+    this.rootElement = props.rootElement;
     this.filterSelector = props.filterSelector;
     this.view = props.filterView;
     this.model = props.filterModel;
     this.init();
   }
 
-  get elements() {
-    return {
-      filter: this.tableElement.querySelector(`.${this.filterSelector}`),
-      currentFilters: this.tableElement.querySelector(`.${this.view.currenFilterSelector}`),
-      form: this.tableElement.querySelector(`.${this.view.filterFormSelector}`),
-      buttonResetFilter: this.tableElement.querySelector(`.${this.view.filterResetSelector}`),
-      filterInputs: this.tableElement.querySelectorAll(`.${this.view.filterInputSelector}`),
-    };
+  get filterElement() {
+    return this.rootElement.querySelector(`.${this.filterSelector}`);
+  }
+  get currentFiltersElement() {
+    return this.rootElement.querySelector(`.${this.view.currenFilterSelector}`);
+  }
+  get formElement() {
+    return this.rootElement.querySelector(`.${this.view.filterFormSelector}`);
+  }
+  get buttonResetFilterElement() {
+    return this.rootElement.querySelector(`.${this.view.filterResetSelector}`);
+  }
+  get filterInputsElement() {
+    return this.rootElement.querySelectorAll(`.${this.view.filterInputSelector}`);
   }
 
   bindEvents() {
-    const form = this.elements.form as HTMLFormElement;
-    const buttonResetFilter = this.elements.buttonResetFilter;
-    const currentFilters = this.elements.currentFilters;
+    const form = this.formElement as HTMLFormElement;
+    const buttonResetFilter = this.buttonResetFilterElement;
+    const currentFilters = this.currentFiltersElement;
 
     currentFilters.addEventListener("click", (evt) => {
       const target = evt.target as HTMLElement;
       if (target.classList.contains(this.view.filterRemoveSelector)) {
         const name = target.dataset.filter;
         this.removeFilter(name);
-        this.tableElement
+        this.rootElement
           .querySelectorAll(`.${this.view.filterInputSelector}[name=${name}]`)
           .forEach((el: HTMLInputElement) => {
             if (el.classList.contains("min")) el.value = el.min;
@@ -73,7 +79,7 @@ export default class Filter implements IFilter {
   }
 
   filterSubmit() {
-    const filterInputs = this.elements.filterInputs;
+    const filterInputs = this.filterInputsElement;
     let filter = [];
     filterInputs.forEach((input: HTMLInputElement) => {
       const name = input.getAttribute("name");
@@ -128,14 +134,14 @@ export default class Filter implements IFilter {
   }
 
   getMinInputValue(name: string) {
-    const input: HTMLInputElement = this.tableElement.querySelector(
+    const input: HTMLInputElement = this.rootElement.querySelector(
       `.${this.view.filterInputSelector}.min[name=${name}]`
     );
     return input.value;
   }
 
   getMaxInputValue(name: string) {
-    const input: HTMLInputElement = this.tableElement.querySelector(
+    const input: HTMLInputElement = this.rootElement.querySelector(
       `.${this.view.filterInputSelector}.max[name=${name}]`
     );
     return input.value;
@@ -144,7 +150,7 @@ export default class Filter implements IFilter {
   setFilter(filter: SelectedFilter[]) {
     if (JSON.stringify(filter) !== JSON.stringify(this.getFilter())) {
       this.model.setFilter(filter);
-      this.tableElement.dispatchEvent(
+      this.rootElement.dispatchEvent(
         new CustomEvent("filterChange", {
           detail: {
             filter: this.getFilter(),
@@ -165,7 +171,7 @@ export default class Filter implements IFilter {
 
   removeFilter(name) {
     this.model.removeFilter(name);
-    this.tableElement.dispatchEvent(
+    this.rootElement.dispatchEvent(
       new CustomEvent("filterChange", {
         detail: {
           filter: this.getFilter(),
@@ -177,12 +183,12 @@ export default class Filter implements IFilter {
 
   renderCurrentFilter() {
     const filters = this.view.getCurrentFilterTemplate(this.getFilter());
-    this.elements.currentFilters.innerHTML = filters;
+    this.currentFiltersElement.innerHTML = filters;
   }
 
   renderFilters() {
     const filters = this.view.getTemplate(this.getFilters());
-    this.elements.filter.innerHTML = filters;
+    this.filterElement.innerHTML = filters;
   }
 
   init() {

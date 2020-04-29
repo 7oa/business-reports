@@ -3,14 +3,14 @@ import { Column, TableProps, SelectedFilter } from "../interface/types";
 import { ITable, ITableModel, ITableView } from "../interface/interface";
 
 export default class Table implements ITable {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   tableSelector: string;
   columns: Column[];
   view: ITableView;
   model: ITableModel;
 
   constructor(props: TableProps) {
-    this.tableElement = props.tableElement;
+    this.rootElement = props.rootElement;
     this.tableSelector = props.tableSelector;
     this.columns = props.columns;
     this.view = props.tableView;
@@ -18,16 +18,20 @@ export default class Table implements ITable {
     this.init();
   }
 
-  get elements() {
-    return {
-      tableHead: this.tableElement.querySelector(`.${this.view.tableHeadSelector}`),
-      tableBody: this.tableElement.querySelector(`.${this.view.tableBodySelector}`),
-      table: this.tableElement.querySelector(`.${this.tableSelector}`),
-    };
+  get tableHeadElement() {
+    return this.rootElement.querySelector(`.${this.view.tableHeadSelector}`);
+  }
+
+  get tableBodyElement() {
+    return this.rootElement.querySelector(`.${this.view.tableHeadSelector}`);
+  }
+
+  get tableElement() {
+    return this.rootElement.querySelector(`.${this.tableSelector}`);
   }
 
   bindEvents() {
-    const tableHeadElement = this.elements.tableHead;
+    const tableHeadElement = this.tableHeadElement;
 
     tableHeadElement.addEventListener("click", (evt) => {
       evt.preventDefault();
@@ -37,7 +41,7 @@ export default class Table implements ITable {
         const sortField = target.dataset.field;
         const sortOrder = target.dataset.sort;
 
-        this.tableElement.querySelectorAll(`.${sortSelector}`).forEach((el: HTMLElement) => {
+        this.rootElement.querySelectorAll(`.${sortSelector}`).forEach((el: HTMLElement) => {
           el.dataset.sort = "";
         });
 
@@ -47,14 +51,14 @@ export default class Table implements ITable {
         this.setSort(sortField, newSortOrder);
       }
     });
-    this.tableElement.addEventListener("filterChange", (evt: CustomEvent) => {
+    this.rootElement.addEventListener("filterChange", (evt: CustomEvent) => {
       this.setFilter(evt.detail.filter);
     });
-    this.tableElement.addEventListener("pageChange", (evt: CustomEvent) => {
+    this.rootElement.addEventListener("pageChange", (evt: CustomEvent) => {
       this.setPage(evt.detail.page);
       this.renderData();
     });
-    this.tableElement.addEventListener("itemsPerPageChange", (evt: CustomEvent) => {
+    this.rootElement.addEventListener("itemsPerPageChange", (evt: CustomEvent) => {
       this.setPage(evt.detail.page);
       this.setItemsPerPage(evt.detail.itemsPerPage);
       this.renderData();
@@ -64,7 +68,7 @@ export default class Table implements ITable {
   setFilter(filter: SelectedFilter[]) {
     this.model.setFilter(filter);
     const dataLength = this.model.data.length;
-    this.tableElement.dispatchEvent(
+    this.rootElement.dispatchEvent(
       new CustomEvent("dataUpdate", {
         detail: { dataLength },
       })
@@ -87,12 +91,12 @@ export default class Table implements ITable {
 
   renderTableHeader() {
     const tableHeader = this.columns.map((column) => this.view.getHeaderTemplate(column)).join("");
-    this.elements.tableHead.innerHTML = tableHeader;
+    this.tableHeadElement.innerHTML = tableHeader;
   }
 
   renderTable() {
     const tableTemplate = this.view.getTemplate();
-    this.elements.table.innerHTML = tableTemplate;
+    this.tableElement.innerHTML = tableTemplate;
   }
 
   renderRow(row: object) {
@@ -122,7 +126,7 @@ export default class Table implements ITable {
         return this.view.getRowTemplate(this.renderRow(row));
       })
       .join("");
-    this.elements.tableBody.innerHTML = template;
+    this.tableBodyElement.innerHTML = template;
   }
 
   init() {

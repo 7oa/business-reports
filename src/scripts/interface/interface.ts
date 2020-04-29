@@ -5,7 +5,7 @@ export interface IData {
 }
 
 export interface IReport {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   columns: Column[];
   itemsPerPage: number;
   data: IData;
@@ -19,7 +19,7 @@ export interface IReportView {
 }
 
 export interface ITable {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   tableSelector: string;
   columns: Column[];
   view: ITableView;
@@ -50,7 +50,7 @@ export interface ITableModel {
 }
 
 export interface IPagination {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   paginationSelector: string;
   view: IPaginationView;
   model: IPaginationModel;
@@ -76,7 +76,7 @@ export interface IPaginationModel {
 }
 
 export interface IFilter {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   filterSelector: string;
   view: IFilterView;
   model: IFilterModel;

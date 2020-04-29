@@ -2,14 +2,14 @@ import { IPagination, IPaginationView, IPaginationModel } from "../interface/int
 import { PaginationProps } from "../interface/types";
 
 export default class Pagination implements IPagination {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   paginationSelector: string;
   itemsPerPageSelector: string;
   view: IPaginationView;
   model: IPaginationModel;
 
   constructor(props: PaginationProps) {
-    this.tableElement = props.tableElement;
+    this.rootElement = props.rootElement;
     this.paginationSelector = props.paginationSelector;
     this.itemsPerPageSelector = props.itemsPerPageSelector;
     this.view = props.paginationView;
@@ -17,32 +17,34 @@ export default class Pagination implements IPagination {
     this.init();
   }
 
-  get elements() {
-    return {
-      pagination: this.tableElement.querySelectorAll(`.${this.paginationSelector}`),
-      itemsPerPage: this.tableElement.querySelector(`.${this.itemsPerPageSelector}`),
-      itemsPerPageSelect: this.tableElement.querySelector(
-        `.${this.view.itemsPerPageSelectSelector}`
-      ),
-    };
+  get paginationElement() {
+    return this.rootElement.querySelectorAll(`.${this.paginationSelector}`);
+  }
+
+  get itemsPerPageElement() {
+    return this.rootElement.querySelector(`.${this.itemsPerPageSelector}`);
+  }
+
+  get itemsPerPageSelectElement() {
+    return this.rootElement.querySelector(`.${this.view.itemsPerPageSelectSelector}`);
   }
 
   bindEvents() {
-    this.tableElement.addEventListener("click", (evt) => {
+    this.rootElement.addEventListener("click", (evt) => {
       const target = evt.target as HTMLElement;
       if (target.classList.contains(this.view.paginationItemSelector)) {
         const selectedPage = target.dataset.page;
         this.setPage(+selectedPage);
       }
     });
-    this.tableElement.addEventListener("dataUpdate", (el: CustomEvent) => {
+    this.rootElement.addEventListener("dataUpdate", (el: CustomEvent) => {
       this.setDataLength(el.detail.dataLength);
       this.setPage(1);
     });
   }
 
   bindItemsPerPageEvents() {
-    this.elements.itemsPerPageSelect.addEventListener("change", (evt) => {
+    this.itemsPerPageSelectElement.addEventListener("change", (evt) => {
       evt.preventDefault();
       const target = evt.target as HTMLInputElement;
       let itemsPerPage = +target.value;
@@ -71,7 +73,7 @@ export default class Pagination implements IPagination {
   setPage(page: number) {
     this.model.setPage(page);
     this.renderPagination();
-    this.tableElement.dispatchEvent(
+    this.rootElement.dispatchEvent(
       new CustomEvent("pageChange", {
         detail: {
           page,
@@ -83,7 +85,7 @@ export default class Pagination implements IPagination {
   setItemsPerPage(itemsPerPage: number) {
     this.model.setItemsPerPage(itemsPerPage);
     this.renderPagination();
-    this.tableElement.dispatchEvent(
+    this.rootElement.dispatchEvent(
       new CustomEvent("itemsPerPageChange", {
         detail: {
           itemsPerPage,
@@ -103,7 +105,7 @@ export default class Pagination implements IPagination {
       this.getCurrentPage(),
       this.getPageCount()
     );
-    this.elements.pagination.forEach((el) => {
+    this.paginationElement.forEach((el) => {
       el.innerHTML = pagination;
     });
   }
@@ -113,7 +115,7 @@ export default class Pagination implements IPagination {
       [10, 30, 50, 70, 100],
       this.getItemsPerPage()
     );
-    this.elements.itemsPerPage.innerHTML = template;
+    this.itemsPerPageElement.innerHTML = template;
   }
 
   init() {

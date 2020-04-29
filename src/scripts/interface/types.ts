@@ -24,7 +24,7 @@ export type ReportProps = {
 };
 
 export type TableProps = {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   tableSelector: string;
   columns: Column[];
   tableView: ITableView;
@@ -32,7 +32,7 @@ export type TableProps = {
 };
 
 export type PaginationProps = {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   paginationSelector: string;
   itemsPerPageSelector: string;
   paginationView: IPaginationView;
@@ -40,7 +40,7 @@ export type PaginationProps = {
 };
 
 export type FilterProps = {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   filterSelector: string;
   filterView: IFilterView;
   filterModel: IFilterModel;

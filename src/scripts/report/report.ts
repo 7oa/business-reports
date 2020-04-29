@@ -13,7 +13,7 @@ import { Column, ReportProps } from "../interface/types";
 import { IReport, IData } from "../interface/interface";
 
 export default class Report implements IReport {
-  tableElement: HTMLElement;
+  rootElement: HTMLElement;
   columns: Column[];
   itemsPerPage: number;
   data: IData;
@@ -21,7 +21,7 @@ export default class Report implements IReport {
   url: string;
 
   constructor(url: string, props: ReportProps) {
-    this.tableElement = document.querySelector(props.element);
+    this.rootElement = document.querySelector(props.element);
     this.columns = props.columns;
     this.itemsPerPage = props.itemsPerPage;
     this.data = new Data();
@@ -33,7 +33,7 @@ export default class Report implements IReport {
   renderTable() {
     return this.data.getData(this.url).then((data: []) => {
       new Pagination({
-        tableElement: this.tableElement,
+        rootElement: this.rootElement,
         paginationSelector: this.view.paginationSelector,
         itemsPerPageSelector: this.view.itemsPerPageSelector,
         paginationView: new PaginationView(),
@@ -44,7 +44,7 @@ export default class Report implements IReport {
       });
 
       new Filter({
-        tableElement: this.tableElement,
+        rootElement: this.rootElement,
         filterSelector: this.view.filterSelector,
         filterView: new FilterView(),
         filterModel: new FilterModel({
@@ -54,7 +54,7 @@ export default class Report implements IReport {
       });
 
       new Table({
-        tableElement: this.tableElement,
+        rootElement: this.rootElement,
         tableSelector: this.view.tableSelector,
         columns: this.columns,
         tableView: new TableView({
@@ -69,7 +69,7 @@ export default class Report implements IReport {
   }
 
   renderTemplate() {
-    this.tableElement.innerHTML = this.view.getTemplate();
+    this.rootElement.innerHTML = this.view.getTemplate();
   }
 
   init() {
