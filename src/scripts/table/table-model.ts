@@ -34,39 +34,21 @@ export default class TableModel implements ITableModel {
   }
 
   sortData(data: object[]) {
-    let sortedData = [];
     const field = this.sortField;
     const orderBy = this.sortOrder;
-    switch (orderBy) {
-      case "asc":
-        sortedData = data.sort(sortFunc(field, "asc"));
-        break;
-      case "desc":
-        sortedData = data.sort(sortFunc(field, "desc"));
-        break;
-      case "":
-        sortedData = data;
-        break;
-    }
-    return sortedData;
+    return orderBy ? data.sort(sortFunc(field, orderBy)) : data;
   }
 
   filterData(data: object[]) {
-    let filteredData = [];
-    const filters = this.filter;
-    filteredData = data.filter((el) => {
-      return filters.every((filter) => {
-        return (
-          parseInt(el[filter.name]) >= parseInt(filter.min) &&
-          parseInt(el[filter.name]) <= parseInt(filter.max)
-        );
-      });
+    return data.filter((el) => {
+      return this.filter.every(
+        (f) => parseInt(el[f.name]) >= parseInt(f.min) && parseInt(el[f.name]) <= parseInt(f.max)
+      );
     });
-    return filteredData;
   }
 
   getNewSortOrder(currentSortOrder: string) {
-    let newSortOrder;
+    let newSortOrder: string;
     const orders = ["asc", "desc", ""];
     const index = orders.indexOf(currentSortOrder);
 
