@@ -1,4 +1,6 @@
-export default class ReportView {
+import { IReportView } from "../interface/interface";
+
+export default class ReportView implements IReportView {
   paginationSelector: string = "js-table-pagination";
   filterSelector: string = "js-table-filter";
   itemsPerPageSelector: string = "js-table-items-per-page";

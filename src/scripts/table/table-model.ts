@@ -26,7 +26,6 @@ export default class TableModel implements ITableModel {
   setFilter(filter: SelectedFilter[]) {
     this.filter = filter;
     this.updateData();
-    console.log(this.filter);
   }
 
   updateData() {

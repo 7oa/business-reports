@@ -1,38 +1,56 @@
 import { Filter, SelectedFilter, Column } from "./types";
 
-// export interface IReport {
-//   tableElement: HTMLElement;
-//   columns: Column[];
-//   itemsPerPage: number;
-//   data: any;
-//   view: ReportView;
+export interface IData {
+  getData(url: string): Promise<any>;
+}
 
-//   init(): void;
-// }
+export interface IReport {
+  tableElement: HTMLElement;
+  columns: Column[];
+  itemsPerPage: number;
+  data: IData;
+  view: IReportView;
+  init(): void;
+}
+
+export interface IReportView {
+  getTemplate(): string;
+}
 
 export interface ITable {
   tableElement: HTMLElement;
-  //pagination: IPagination;
-  //filter: IFilter;
+  pagination?: IPagination;
+  filter?: IFilter;
   view: ITableView;
   model: ITableModel;
   init(): void;
 }
 export interface ITableView {
+  tableHeadSelector: string;
+  tableBodySelector: string;
+  sortFieldSelector: string;
   getTemplate(): string;
+  getHeaderTemplate(column: Column): string;
+  getColumnTemplate(item: string): string;
+  getRowTemplate(item: string): string;
 }
 
 export interface ITableModel {
   initialData: object[];
   data: object[];
-  getData(): object;
+  currentPage: number;
+  itemsPerPage: number;
+  getData(): object[];
+  getNewSortOrder(order: string): string;
+  setFilter(filter: SelectedFilter[]): void;
+  setSort(field: string, orderBy: string): void;
 }
 
 export interface IPagination {
-  getCurrentPage(): number;
-  getItemsPerPage(): number;
   view: IPaginationView;
   model: IPaginationModel;
+  getCurrentPage(): number;
+  getItemsPerPage(): number;
   init(): void;
 }
 

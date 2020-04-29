@@ -1,17 +1,13 @@
-import TableView from "./table-view";
-import TableModel from "./table-model";
-// import Pagination from "../pagination/pagination.js";
-// import Filter from "../filter/filter.js";
-import { imageLink } from "../utils/image-link.js";
+import { imageLink } from "../utils/image-link";
 import { Column, TableProps } from "../interface/types";
-import { ITable, IPagination, IFilter } from "../interface/interface";
+import { ITable, IPagination, IFilter, ITableModel, ITableView } from "../interface/interface";
 
 export default class Table implements ITable {
   tableElement: HTMLElement;
   tableSelector: string;
   columns: Column[];
-  view: TableView;
-  model: TableModel;
+  view: ITableView;
+  model: ITableModel;
   pagination: IPagination;
   filter: IFilter;
 
@@ -19,29 +15,10 @@ export default class Table implements ITable {
     this.tableElement = props.tableElement;
     this.tableSelector = props.tableSelector;
     this.columns = props.columns;
-    this.view = new TableView({
-      columnsLength: this.columns.length,
-    });
-    this.model = new TableModel({
-      data: props.data,
-      itemsPerPage: props.itemsPerPage,
-    });
+    this.view = props.tableView;
+    this.model = props.tableModel;
     this.pagination = props.pagination;
     this.filter = props.filter;
-    // this.pagination = new Pagination({
-    //   tableElement: this.tableElement,
-    //   paginationSelector: this.view.paginationSelector,
-    //   itemsPerPageSelector: this.view.itemsPerPageSelector,
-    //   itemsPerPage: props.itemsPerPage,
-    //   dataLength: props.data.length,
-    // });
-    // this.filter = new Filter({
-    //   tableElement: this.tableElement,
-    //   filterSelector: this.view.filterSelector,
-    //   data: props.data,
-    //   columns: props.columns.filter((el) => el.filter === true),
-    // });
-
     this.init();
   }
   get elements() {
@@ -57,7 +34,7 @@ export default class Table implements ITable {
 
     tableHeadElement.addEventListener("click", (evt) => {
       evt.preventDefault();
-      const sortSelector = this.view.sorFieldSelector;
+      const sortSelector = this.view.sortFieldSelector;
       const target = evt.target as HTMLElement;
       if (target.classList.contains(sortSelector)) {
         const sortField = target.dataset.field;

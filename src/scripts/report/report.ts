@@ -1,78 +1,71 @@
 import Data from "../data/data";
 import ReportView from "./report-view";
 import Table from "../table/table";
+import TableView from "../table/table-view";
+import TableModel from "../table/table-model";
 import Pagination from "../pagination/pagination";
-// import PaginationView from "../pagination/pagination-view.js";
-// import PaginationModel from "../pagination/pagination-model.js";
+import PaginationView from "../pagination/pagination-view";
+import PaginationModel from "../pagination/pagination-model";
 import Filter from "../filter/filter";
+import FilterView from "../filter/filter-view";
+import FilterModel from "../filter/filter-model";
 import { Column, ReportProps } from "../interface/types";
-
-interface IReport {
-  tableElement: HTMLElement;
-  columns: Column[];
-  itemsPerPage: number;
-  data: any;
-  view: ReportView;
-
-  init(): void;
-}
+import { IReport, IData } from "../interface/interface";
 
 export default class Report implements IReport {
   tableElement: HTMLElement;
   columns: Column[];
   itemsPerPage: number;
-  data: any;
+  data: IData;
   view: ReportView;
+  url: string;
 
   constructor(url: string, props: ReportProps) {
     this.tableElement = document.querySelector(props.element);
     this.columns = props.columns;
     this.itemsPerPage = props.itemsPerPage;
-    this.data = new Data().getData(url);
+    this.data = new Data();
     this.view = new ReportView();
+    this.url = url;
     this.init();
   }
 
   renderTable() {
-    //const paginationView = new PaginationView();
-    //const paginationModel = new PaginationModel();
-    const tableProps = {
-      tableElement: this.tableElement,
-      tableSelector: this.view.tableSelector,
-      itemsPerPage: this.itemsPerPage,
-      columns: this.columns,
-    };
-
-    const paginationProps = {
-      tableElement: this.tableElement,
-      paginationSelector: this.view.paginationSelector,
-      itemsPerPageSelector: this.view.itemsPerPageSelector,
-      itemsPerPage: this.itemsPerPage,
-    };
-
-    const filterProps = {
-      tableElement: this.tableElement,
-      filterSelector: this.view.filterSelector,
-      columns: this.columns.filter((el) => el.filter === true),
-    };
-
-    return this.data.then((data: []) => {
+    return this.data.getData(this.url).then((data: []) => {
       const pagination = new Pagination({
-        ...paginationProps,
-        dataLength: data.length,
+        tableElement: this.tableElement,
+        paginationSelector: this.view.paginationSelector,
+        itemsPerPageSelector: this.view.itemsPerPageSelector,
+        paginationView: new PaginationView(),
+        paginationModel: new PaginationModel({
+          itemsPerPage: this.itemsPerPage,
+          dataLength: data.length,
+        }),
       });
 
       const filter = new Filter({
-        ...filterProps,
-        data,
+        tableElement: this.tableElement,
+        filterSelector: this.view.filterSelector,
+        filterView: new FilterView(),
+        filterModel: new FilterModel({
+          data,
+          columns: this.columns.filter((el) => el.filter === true),
+        }),
       });
 
       new Table({
-        ...tableProps,
-        data,
+        tableElement: this.tableElement,
+        tableSelector: this.view.tableSelector,
+        columns: this.columns,
+        tableView: new TableView({
+          columnsLength: this.columns.length,
+        }),
+        tableModel: new TableModel({
+          data,
+          itemsPerPage: this.itemsPerPage,
+        }),
         pagination,
         filter,
-        //filter: new Filter(props, filterView, filterModel),
       });
     });
   }

@@ -1,4 +1,6 @@
-class Data {
+import { IData } from "../interface/interface";
+
+export default class Data implements IData {
   getData(url: string) {
     return new Promise((resolve, reject) => {
       fetch(url)
@@ -8,4 +10,3 @@ class Data {
     });
   }
 }
-export default Data;

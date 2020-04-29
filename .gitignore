@@ -2,6 +2,6 @@
 node_modules
 dist
 *.json
-image-link.js
+image-link.ts
 *.docx
 

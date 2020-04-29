@@ -1,4 +1,13 @@
-import { IPagination, IFilter } from "./interface";
+import {
+  IPagination,
+  IFilter,
+  IPaginationView,
+  IPaginationModel,
+  IFilterView,
+  IFilterModel,
+  ITableModel,
+  ITableView,
+} from "./interface";
 
 export type Column = {
   field: string;
@@ -17,26 +26,26 @@ export type ReportProps = {
 export type TableProps = {
   tableElement: HTMLElement;
   tableSelector: string;
-  itemsPerPage: number;
   columns: Column[];
-  data: object[];
-  pagination: IPagination;
-  filter: IFilter;
+  tableView: ITableView;
+  tableModel: ITableModel;
+  pagination?: IPagination;
+  filter?: IFilter;
 };
 
 export type PaginationProps = {
   tableElement: HTMLElement;
   paginationSelector: string;
   itemsPerPageSelector: string;
-  itemsPerPage: number;
-  dataLength: number;
+  paginationView: IPaginationView;
+  paginationModel: IPaginationModel;
 };
 
 export type FilterProps = {
   tableElement: HTMLElement;
   filterSelector: string;
-  columns: Column[];
-  data: object[];
+  filterView: IFilterView;
+  filterModel: IFilterModel;
 };
 
 export type Filter = {

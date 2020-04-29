@@ -4,7 +4,7 @@ import { ITableView } from "../interface/interface";
 export default class TableView implements ITableView {
   tableHeadSelector: string = "js-table-head";
   tableBodySelector: string = "js-table-body";
-  sorFieldSelector: string = "js-sort";
+  sortFieldSelector: string = "js-sort";
   columnsLength: number;
 
   constructor(props: { columnsLength: number }) {
@@ -12,7 +12,7 @@ export default class TableView implements ITableView {
   }
 
   getHeaderTemplate(column: Column) {
-    const sortSelector = this.sorFieldSelector;
+    const sortSelector = this.sortFieldSelector;
     return `
       <div class="table__col${column.sort ? ` ${sortSelector}` : ""}" 
         data-field="${column.field}"

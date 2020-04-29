@@ -1,9 +1,6 @@
 import { IFilter, IFilterView, IFilterModel } from "../interface/interface";
 import { FilterProps, SelectedFilter, Filter as FilterType } from "../interface/types";
 
-import FilterView from "./filter-view";
-import FilterModel from "./filter-model";
-
 export default class Filter implements IFilter {
   tableElement: HTMLElement;
   filterSelector: string;
@@ -13,11 +10,8 @@ export default class Filter implements IFilter {
   constructor(props: FilterProps) {
     this.tableElement = props.tableElement;
     this.filterSelector = props.filterSelector;
-    this.view = new FilterView();
-    this.model = new FilterModel({
-      data: props.data,
-      columns: props.columns,
-    });
+    this.view = props.filterView;
+    this.model = props.filterModel;
   }
 
   get elements() {

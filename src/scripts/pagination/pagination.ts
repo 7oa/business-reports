@@ -1,9 +1,6 @@
 import { IPagination, IPaginationView, IPaginationModel } from "../interface/interface";
 import { PaginationProps } from "../interface/types";
 
-import PaginationView from "./pagination-view";
-import PaginationModel from "./pagination-model";
-
 export default class Pagination implements IPagination {
   tableElement: HTMLElement;
   paginationSelector: string;
@@ -15,11 +12,8 @@ export default class Pagination implements IPagination {
     this.tableElement = props.tableElement;
     this.paginationSelector = props.paginationSelector;
     this.itemsPerPageSelector = props.itemsPerPageSelector;
-    this.view = new PaginationView();
-    this.model = new PaginationModel({
-      itemsPerPage: props.itemsPerPage,
-      dataLength: props.dataLength,
-    });
+    this.view = props.paginationView;
+    this.model = props.paginationModel;
   }
 
   get elements() {
