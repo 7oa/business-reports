@@ -84,22 +84,14 @@ export default class Filter implements IFilter {
     filterInputs.forEach((input: HTMLInputElement) => {
       const name = input.getAttribute("name");
       const currentFilter = filter.find((el) => el.name === name);
-      const filterTitle = this.getFilters().find((item: FilterType) => item.field === name).title;
+      const title = this.getFilters().find((item: FilterType) => item.field === name).title;
       const value = input.value;
-      const minValue = input.min;
-      const maxValue = input.max;
-      if (input.classList.contains("min") && value !== minValue) {
+      const filterType = input.getAttribute("filter-type");
+      if (value !== input[filterType]) {
         if (currentFilter) {
-          currentFilter.min = value;
+          currentFilter[filterType] = value;
         } else {
-          filter.push({ name: name, title: filterTitle, min: value, max: maxValue });
-        }
-      }
-      if (input.classList.contains("max") && value !== maxValue) {
-        if (currentFilter) {
-          currentFilter.max = value;
-        } else {
-          filter.push({ name: name, title: filterTitle, min: minValue, max: value });
+          filter.push({ name, title, min: input.min, max: input.max, [filterType]: value });
         }
       }
     });

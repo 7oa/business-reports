@@ -31,6 +31,7 @@ export default class FilterView implements IFilterView {
           </div>
           <div class="filter-input">
             <input class="filter-input__input min ${this.filterInputSelector}" type="text" 
+              filter-type="min"
               name="${filter.field}" 
               min="${filter.min}" 
               max="${filter.max}" 
@@ -39,6 +40,7 @@ export default class FilterView implements IFilterView {
           </div>
           <div class="filter-input">
             <input class="filter-input__input max ${this.filterInputSelector}" type="text" 
+              filter-type="max"
               name="${filter.field}" 
               min="${filter.min}" 
               max="${filter.max}" 
