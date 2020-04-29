@@ -14,6 +14,7 @@ export default class Pagination implements IPagination {
     this.itemsPerPageSelector = props.itemsPerPageSelector;
     this.view = props.paginationView;
     this.model = props.paginationModel;
+    this.init();
   }
 
   get elements() {

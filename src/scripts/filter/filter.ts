@@ -12,6 +12,7 @@ export default class Filter implements IFilter {
     this.filterSelector = props.filterSelector;
     this.view = props.filterView;
     this.model = props.filterModel;
+    this.init();
   }
 
   get elements() {

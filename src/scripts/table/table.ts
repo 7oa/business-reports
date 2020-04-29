@@ -136,7 +136,5 @@ export default class Table implements ITable {
     this.renderTableHeader();
     this.renderData();
     this.bindEvents();
-    if (this.pagination) this.pagination.init();
-    if (this.filter) this.filter.init();
   }
 }
