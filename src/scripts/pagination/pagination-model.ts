@@ -1,8 +1,13 @@
-export default class PaginationModel {
-  constructor(props) {
+import { IPaginationModel } from "../interface/interface";
+
+export default class PaginationModel implements IPaginationModel {
+  itemsPerPage: number;
+  dataLength: number;
+  currentPage: number = 1;
+
+  constructor(props: { itemsPerPage: number; dataLength: number }) {
     this.itemsPerPage = props.itemsPerPage;
     this.dataLength = props.dataLength;
-    this.currentPage = 1;
   }
 
   get pageCount() {
@@ -18,10 +23,10 @@ export default class PaginationModel {
       end: Math.round(current + delta / 2),
     };
 
-    function getRange(start, end) {
+    function getRange(start: number, end: number) {
       return Array(end - start + 1)
-        .fill()
-        .map((_, i) => i + start);
+        .fill(1)
+        .map((_: number, i: number) => i + start);
     }
 
     if (range.start - 1 === 1 || range.end + 1 === length) {
@@ -34,7 +39,8 @@ export default class PaginationModel {
         ? getRange(Math.min(range.start, length - delta), Math.min(range.end, length))
         : getRange(1, Math.min(length, delta + 1));
 
-    const withDots = (value, pair) => (pages.length + 1 !== length ? pair : [value]);
+    const withDots = (value: any, pair: (string | number)[]) =>
+      pages.length + 1 !== length ? pair : [value];
 
     if (pages[0] !== 1) {
       pages = withDots(1, [1, "..."]).concat(pages);
@@ -47,16 +53,16 @@ export default class PaginationModel {
     return pages;
   }
 
-  setItemsPerPage(itemsPerPage) {
+  setItemsPerPage(itemsPerPage: number) {
     this.itemsPerPage = itemsPerPage;
     this.currentPage = 1;
   }
 
-  setPage(page) {
+  setPage(page: number) {
     this.currentPage = page;
   }
 
-  setDataLength(length) {
+  setDataLength(length: number) {
     this.dataLength = length;
   }
 }

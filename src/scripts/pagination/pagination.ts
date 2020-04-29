@@ -1,8 +1,17 @@
-import PaginationView from "./pagination-view.js";
-import PaginationModel from "./pagination-model.js";
+import { IPagination, IPaginationView, IPaginationModel } from "../interface/interface";
+import { PaginationProps } from "../interface/types";
 
-export default class Pagination {
-  constructor(props) {
+import PaginationView from "./pagination-view";
+import PaginationModel from "./pagination-model";
+
+export default class Pagination implements IPagination {
+  tableElement: HTMLElement;
+  paginationSelector: string;
+  itemsPerPageSelector: string;
+  view: IPaginationView;
+  model: IPaginationModel;
+
+  constructor(props: PaginationProps) {
     this.tableElement = props.tableElement;
     this.paginationSelector = props.paginationSelector;
     this.itemsPerPageSelector = props.itemsPerPageSelector;
@@ -25,12 +34,13 @@ export default class Pagination {
 
   bindPaginationEvent() {
     this.tableElement.addEventListener("click", (evt) => {
-      if (evt.target.classList.contains(this.view.paginationItemSelector)) {
-        const selectedPage = evt.target.dataset.page;
-        this.setPage(selectedPage);
+      const target = evt.target as HTMLElement;
+      if (target.classList.contains(this.view.paginationItemSelector)) {
+        const selectedPage = target.dataset.page;
+        this.setPage(+selectedPage);
       }
     });
-    this.tableElement.addEventListener("dataUpdate", (el) => {
+    this.tableElement.addEventListener("dataUpdate", (el: CustomEvent) => {
       this.setDataLength(el.detail.dataLength);
       this.setPage(1);
     });
@@ -39,7 +49,8 @@ export default class Pagination {
   bindItemsPerPageEvents() {
     this.elements.itemsPerPageSelect.addEventListener("change", (evt) => {
       evt.preventDefault();
-      let itemsPerPage = evt.target.value;
+      const target = evt.target as HTMLInputElement;
+      let itemsPerPage = +target.value;
       if (itemsPerPage !== this.getItemsPerPage()) {
         this.setItemsPerPage(itemsPerPage);
       }
@@ -62,24 +73,24 @@ export default class Pagination {
     return this.model.pageCount;
   }
 
-  setPage(page) {
+  setPage(page: number) {
     this.model.setPage(page);
     this.renderPagination();
     this.tableElement.dispatchEvent(new CustomEvent("pageChange"));
   }
 
-  setItemsPerPage(itemsPerPage) {
+  setItemsPerPage(itemsPerPage: number) {
     this.model.setItemsPerPage(itemsPerPage);
     this.renderPagination();
     this.tableElement.dispatchEvent(new CustomEvent("itemsPerPageChange"));
   }
 
-  setDataLength(value) {
+  setDataLength(value: number) {
     this.model.setDataLength(value);
   }
 
   renderPagination() {
-    const pagination = this.view.getPaginationTemplate(
+    const pagination = this.view.getTemplate(
       this.getPages(),
       this.getCurrentPage(),
       this.getPageCount()

@@ -1,8 +1,14 @@
-export default class FilterModel {
-  constructor(props) {
+import { IFilterModel } from "../interface/interface";
+import { SelectedFilter, Column } from "../interface/types";
+
+export default class FilterModel implements IFilterModel {
+  filter: SelectedFilter[] = [];
+  data: object[];
+  columns: Column[];
+
+  constructor(props: { data: object[]; columns: Column[] }) {
     this.data = props.data;
     this.columns = props.columns;
-    this.filter = [];
   }
 
   get filters() {
@@ -23,12 +29,12 @@ export default class FilterModel {
     });
   }
 
-  removeFilter(name) {
+  removeFilter(name: string) {
     const filter = this.filter.filter((el) => el.name !== name);
     this.setFilter(filter);
   }
 
-  setFilter(filter) {
+  setFilter(filter: SelectedFilter[]) {
     this.filter = filter;
   }
 }

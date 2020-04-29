@@ -1,8 +1,16 @@
-import FilterView from "./filter-view.js";
-import FilterModel from "./filter-model.js";
+import { IFilter, IFilterView, IFilterModel } from "../interface/interface";
+import { FilterProps, SelectedFilter, Filter as FilterType } from "../interface/types";
 
-export default class Filter {
-  constructor(props) {
+import FilterView from "./filter-view";
+import FilterModel from "./filter-model";
+
+export default class Filter implements IFilter {
+  tableElement: HTMLElement;
+  filterSelector: string;
+  view: IFilterView;
+  model: IFilterModel;
+
+  constructor(props: FilterProps) {
     this.tableElement = props.tableElement;
     this.filterSelector = props.filterSelector;
     this.view = new FilterView();
@@ -23,18 +31,18 @@ export default class Filter {
   }
 
   bindEvents() {
-    const form = this.elements.form;
+    const form = this.elements.form as HTMLFormElement;
     const buttonResetFilter = this.elements.buttonResetFilter;
     const currentFilters = this.elements.currentFilters;
 
     currentFilters.addEventListener("click", (evt) => {
-      const target = evt.target;
+      const target = evt.target as HTMLElement;
       if (target.classList.contains(this.view.filterRemoveSelector)) {
         const name = target.dataset.filter;
         this.removeFilter(name);
         this.tableElement
           .querySelectorAll(`.${this.view.filterInputSelector}[name=${name}]`)
-          .forEach((el) => {
+          .forEach((el: HTMLInputElement) => {
             if (el.classList.contains("min")) el.value = el.min;
             else el.value = el.max;
           });
@@ -48,7 +56,7 @@ export default class Filter {
 
     form.addEventListener("change", (evt) => {
       evt.preventDefault();
-      const input = evt.target;
+      const input = evt.target as HTMLInputElement;
       if (input.classList.contains(this.view.filterInputSelector)) {
         this.validation(input);
       }
@@ -56,7 +64,7 @@ export default class Filter {
 
     form.addEventListener("keyup", (evt) => {
       evt.preventDefault();
-      const input = evt.target;
+      const input = evt.target as HTMLInputElement;
       if (input.classList.contains(this.view.filterInputSelector)) {
         input.value = input.value.replace(/\D/g, "");
       }
@@ -72,10 +80,10 @@ export default class Filter {
   filterSubmit() {
     const filterInputs = this.elements.filterInputs;
     let filter = [];
-    filterInputs.forEach((input) => {
+    filterInputs.forEach((input: HTMLInputElement) => {
       const name = input.getAttribute("name");
       const currentFilter = filter.find((el) => el.name === name);
-      const filterTitle = this.getFilters().find((item) => item.field === name).title;
+      const filterTitle = this.getFilters().find((item: FilterType) => item.field === name).title;
       const value = input.value;
       const minValue = input.min;
       const maxValue = input.max;
@@ -97,44 +105,48 @@ export default class Filter {
     this.setFilter(filter);
   }
 
-  validation(input) {
+  validation(input: HTMLInputElement) {
     const name = input.name;
     const value = +input.value;
-    const filter = this.getFilters().find((f) => f.field === input.name);
+    const filter = this.getFilters().find((f: FilterType) => f.field === input.name);
 
-    if (value > filter.max) {
-      input.value = filter.max;
-    } else if (value < filter.min) {
-      input.value = filter.min;
+    if (value > +filter.max) {
+      input.value = filter.max.toString();
+    } else if (value < +filter.min) {
+      input.value = filter.min.toString();
     } else {
       if (input.classList.contains("min")) {
         const maxValue = this.getMaxInputValue(name);
-        if (value > maxValue) {
+        if (value > +maxValue) {
           input.value = maxValue;
         }
       } else {
         const minValue = this.getMinInputValue(name);
-        if (value < minValue) {
+        if (value < +minValue) {
           input.value = minValue;
         }
       }
     }
     if (input.value === "") {
-      input.value = 0;
+      input.value = "0";
     }
   }
 
-  getMinInputValue(name) {
-    return this.tableElement.querySelector(`.${this.view.filterInputSelector}.min[name=${name}]`)
-      .value;
+  getMinInputValue(name: string) {
+    const input: HTMLInputElement = this.tableElement.querySelector(
+      `.${this.view.filterInputSelector}.min[name=${name}]`
+    );
+    return input.value;
   }
 
-  getMaxInputValue(name) {
-    return this.tableElement.querySelector(`.${this.view.filterInputSelector}.max[name=${name}]`)
-      .value;
+  getMaxInputValue(name: string) {
+    const input: HTMLInputElement = this.tableElement.querySelector(
+      `.${this.view.filterInputSelector}.max[name=${name}]`
+    );
+    return input.value;
   }
 
-  setFilter(filter) {
+  setFilter(filter: SelectedFilter[]) {
     if (JSON.stringify(filter) !== JSON.stringify(this.getFilter())) {
       this.model.setFilter(filter);
       this.tableElement.dispatchEvent(new CustomEvent("filterChange"));
@@ -162,7 +174,7 @@ export default class Filter {
   }
 
   renderFilters() {
-    const filters = this.view.getFilterTemplate(this.getFilters());
+    const filters = this.view.getTemplate(this.getFilters());
     this.elements.filter.innerHTML = filters;
   }
 

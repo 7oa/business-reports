@@ -1,39 +1,54 @@
-import TableView from "./table-view.js";
-import TableModel from "./table-model.js";
-import Pagination from "../pagination/pagination.js";
-import Filter from "../filter/filter.js";
+import TableView from "./table-view";
+import TableModel from "./table-model";
+// import Pagination from "../pagination/pagination.js";
+// import Filter from "../filter/filter.js";
 import { imageLink } from "../utils/image-link.js";
+import { Column, TableProps } from "../interface/types";
+import { ITable, IPagination, IFilter } from "../interface/interface";
 
-export default class Table {
-  constructor(props) {
-    this.tableElement = document.querySelector(props.element);
+export default class Table implements ITable {
+  tableElement: HTMLElement;
+  tableSelector: string;
+  columns: Column[];
+  view: TableView;
+  model: TableModel;
+  pagination: IPagination;
+  filter: IFilter;
+
+  constructor(props: TableProps) {
+    this.tableElement = props.tableElement;
+    this.tableSelector = props.tableSelector;
     this.columns = props.columns;
     this.view = new TableView({
-      columns: this.columns.length,
+      columnsLength: this.columns.length,
     });
     this.model = new TableModel({
       data: props.data,
       itemsPerPage: props.itemsPerPage,
     });
-    this.pagination = new Pagination({
-      tableElement: this.tableElement,
-      paginationSelector: this.view.paginationSelector,
-      itemsPerPageSelector: this.view.itemsPerPageSelector,
-      itemsPerPage: props.itemsPerPage,
-      dataLength: props.data.length,
-    });
-    this.filter = new Filter({
-      tableElement: this.tableElement,
-      filterSelector: this.view.filterSelector,
-      data: props.data,
-      columns: props.columns.filter((el) => el.filter === true),
-    });
+    this.pagination = props.pagination;
+    this.filter = props.filter;
+    // this.pagination = new Pagination({
+    //   tableElement: this.tableElement,
+    //   paginationSelector: this.view.paginationSelector,
+    //   itemsPerPageSelector: this.view.itemsPerPageSelector,
+    //   itemsPerPage: props.itemsPerPage,
+    //   dataLength: props.data.length,
+    // });
+    // this.filter = new Filter({
+    //   tableElement: this.tableElement,
+    //   filterSelector: this.view.filterSelector,
+    //   data: props.data,
+    //   columns: props.columns.filter((el) => el.filter === true),
+    // });
+
     this.init();
   }
   get elements() {
     return {
       tableHead: this.tableElement.querySelector(`.${this.view.tableHeadSelector}`),
       tableBody: this.tableElement.querySelector(`.${this.view.tableBodySelector}`),
+      table: this.tableElement.querySelector(`.${this.tableSelector}`),
     };
   }
 
@@ -43,16 +58,17 @@ export default class Table {
     tableHeadElement.addEventListener("click", (evt) => {
       evt.preventDefault();
       const sortSelector = this.view.sorFieldSelector;
-      if (evt.target.classList.contains(sortSelector)) {
-        const sortField = evt.target.dataset.field;
-        const sortOrder = evt.target.dataset.sort;
+      const target = evt.target as HTMLElement;
+      if (target.classList.contains(sortSelector)) {
+        const sortField = target.dataset.field;
+        const sortOrder = target.dataset.sort;
 
-        this.tableElement.querySelectorAll(`.${sortSelector}`).forEach((el) => {
+        this.tableElement.querySelectorAll(`.${sortSelector}`).forEach((el: HTMLElement) => {
           el.dataset.sort = "";
         });
 
         const newSortOrder = this.model.getNewSortOrder(sortOrder);
-        evt.target.dataset.sort = newSortOrder;
+        target.dataset.sort = newSortOrder;
 
         this.setSort(sortField, newSortOrder);
       }
@@ -80,16 +96,16 @@ export default class Table {
     this.renderData();
   }
 
-  setSort(field, orderBy) {
+  setSort(field: string, orderBy: string) {
     this.model.setSort(field, orderBy);
     this.renderData();
   }
 
-  setPage(page) {
+  setPage(page: number) {
     this.model.currentPage = page;
   }
 
-  setItemsPerPage(value) {
+  setItemsPerPage(value: number) {
     this.model.itemsPerPage = value;
   }
 
@@ -99,11 +115,11 @@ export default class Table {
   }
 
   renderTable() {
-    const tableTemplate = this.view.getTableTemplate();
-    this.tableElement.innerHTML = tableTemplate;
+    const tableTemplate = this.view.getTemplate();
+    this.elements.table.innerHTML = tableTemplate;
   }
 
-  renderRow(row) {
+  renderRow(row: object) {
     return this.columns
       .map((column) => {
         return this.view.getColumnTemplate(
@@ -115,8 +131,8 @@ export default class Table {
       .join("");
   }
 
-  _generateColumnByTemplate(el, template) {
-    const column = template.replace(/#[A-Za-z]+#/g, (str) => {
+  _generateColumnByTemplate(el: object, template: any) {
+    const column = template.replace(/#[A-Za-z]+#/g, (str: string) => {
       const field = str.replace(/#/g, "");
       return `${field === "image" ? imageLink + el[field] : el[field]}`;
     });

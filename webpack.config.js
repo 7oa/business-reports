@@ -23,7 +23,7 @@ const optimization = () => {
 
 module.exports = {
   context: path.resolve(__dirname, "src"),
-  entry: { bundle: ["@babel/polyfill", "./scripts/index.js"] },
+  entry: { bundle: ["@babel/polyfill", "./scripts/index.ts"] },
   output: {
     filename: "script.js",
     path: path.resolve(__dirname, "dist"),
@@ -32,6 +32,9 @@ module.exports = {
   devServer: {
     port: 4200,
     hot: isDev,
+  },
+  resolve: {
+    extensions: [".ts", ".tsx", ".js"],
   },
   plugins: [
     new HTMLWebpackPlugin({
@@ -54,12 +57,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env"],
+            plugins: [["transform-class-properties", { spec: true }]],
+            presets: ["@babel/preset-env", "@babel/preset-typescript"],
           },
         },
       },

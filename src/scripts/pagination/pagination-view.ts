@@ -1,10 +1,10 @@
-export default class PaginationView {
-  constructor() {
-    this.itemsPerPageSelectSelector = "js-items-per-page";
-    this.paginationItemSelector = "js-pagination-item";
-  }
+import { IPaginationView } from "../interface/interface";
 
-  getPaginationTemplate(pages, currentPage, pageCount) {
+export default class PaginationView implements IPaginationView {
+  itemsPerPageSelectSelector: string = "js-items-per-page";
+  paginationItemSelector: string = "js-pagination-item";
+
+  getTemplate(pages: (string | number)[], currentPage: number, pageCount: number) {
     const pagesList = pages.map((page) => {
       if (page !== "...") {
         return `
@@ -27,7 +27,7 @@ export default class PaginationView {
     return template;
   }
 
-  _generateSelectOptions(options, selected) {
+  _generateSelectOptions(options: number[], selected: number) {
     return options.map((option) => {
       return `
         <option value="${option}" 
@@ -38,7 +38,7 @@ export default class PaginationView {
     });
   }
 
-  getItemsPerPageTemplate(options, selected) {
+  getItemsPerPageTemplate(options: number[], selected: number) {
     return `
       <div class="items-per-page">
         <div class="items-per-page__label">Items Per Page</div>

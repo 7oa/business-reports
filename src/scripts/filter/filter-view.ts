@@ -1,13 +1,14 @@
-export default class FilterView {
-  constructor() {
-    this.currenFilterSelector = "js-current-filters";
-    this.filterFormSelector = "js-filter-form";
-    this.filterResetSelector = "js-reset-filter";
-    this.filterInputSelector = "js-filter-input";
-    this.filterRemoveSelector = "js-remove-filter";
-  }
+import { IFilterView } from "../interface/interface";
+import { Filter, SelectedFilter } from "../interface/types";
 
-  getCurrentFilterTemplate(data) {
+export default class FilterView implements IFilterView {
+  currenFilterSelector: string = "js-current-filters";
+  filterFormSelector: string = "js-filter-form";
+  filterResetSelector: string = "js-reset-filter";
+  filterInputSelector: string = "js-filter-input";
+  filterRemoveSelector: string = "js-remove-filter";
+
+  getCurrentFilterTemplate(data: SelectedFilter[]) {
     const currentFilter = data.map((el) => {
       return `
         <div class="current-filters__item">
@@ -18,7 +19,7 @@ export default class FilterView {
     return currentFilter.join("");
   }
 
-  getFilterTemplate(data) {
+  getTemplate(data: Filter[]) {
     const filters = data.map(
       (filter) => `
         <div class="filter__row" data-filter="${filter.field}">

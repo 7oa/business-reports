@@ -1,25 +1,32 @@
-import { sortFunc } from "../utils/utils.js";
+import { sortFunc } from "../utils/utils";
+import { SelectedFilter } from "../interface/types";
+import { ITableModel } from "../interface/interface";
 
-export default class TableModel {
-  constructor(props) {
+export default class TableModel implements ITableModel {
+  sortOrder: string = "";
+  sortField: string = "";
+  filter: SelectedFilter[] = [];
+  currentPage: number = 1;
+  initialData: object[];
+  data: object[];
+  itemsPerPage: number;
+
+  constructor(props: { data: object[]; itemsPerPage: number }) {
     this.initialData = [...props.data];
     this.data = [...props.data];
-    this.sortOrder = "";
-    this.sortField = "";
-    this.filter = [];
-    this.currentPage = 1;
     this.itemsPerPage = props.itemsPerPage;
   }
 
-  setSort(field, orderBy) {
+  setSort(field: string, orderBy: string) {
     this.sortOrder = orderBy;
     this.sortField = field;
     this.updateData();
   }
 
-  setFilter(filter) {
+  setFilter(filter: SelectedFilter[]) {
     this.filter = filter;
     this.updateData();
+    console.log(this.filter);
   }
 
   updateData() {
@@ -27,7 +34,7 @@ export default class TableModel {
     this.data = this.filterData(sortedData);
   }
 
-  sortData(data) {
+  sortData(data: object[]) {
     let sortedData = [];
     const field = this.sortField;
     const orderBy = this.sortOrder;
@@ -45,7 +52,7 @@ export default class TableModel {
     return sortedData;
   }
 
-  filterData(data) {
+  filterData(data: object[]) {
     let filteredData = [];
     const filters = this.filter;
     filteredData = data.filter((el) => {
@@ -59,7 +66,7 @@ export default class TableModel {
     return filteredData;
   }
 
-  getNewSortOrder(currentSortOrder) {
+  getNewSortOrder(currentSortOrder: string) {
     let newSortOrder;
     const orders = ["asc", "desc", ""];
     const index = orders.indexOf(currentSortOrder);

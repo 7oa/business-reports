@@ -1,7 +1,7 @@
 import "nodelist-foreach-polyfill";
 import "whatwg-fetch";
 import "../css/style.scss";
-import Report from "./report/report.js";
+import Report from "./report/report";
 
 const bisnessColumns = [
   {
