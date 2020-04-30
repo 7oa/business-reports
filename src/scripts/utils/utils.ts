@@ -1,5 +1,5 @@
 const sortFunc = (key: string, order: string = "asc") => {
-  return (a: object, b: object) => {
+  return (a: any, b: any) => {
     if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
       return 0;
     }
