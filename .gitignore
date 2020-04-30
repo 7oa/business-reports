@@ -4,4 +4,5 @@ dist
 *.json
 image-link.ts
 *.docx
+coverage
 
