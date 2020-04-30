@@ -31,7 +31,7 @@ export default class Report implements IReport {
   }
 
   renderTable() {
-    return this.data.getData(this.url).then((data: []) => {
+    this.data.getData(this.url).then((data: []) => {
       new Pagination({
         rootElement: this.rootElement,
         paginationSelector: this.view.paginationSelector,
