@@ -26,7 +26,7 @@ export default class PaginationModel implements IPaginationModel {
     function getRange(start: number, end: number) {
       return Array(end - start + 1)
         .fill(1)
-        .map((_: number, i: number) => i + start);
+        .map((_, i) => i + start);
     }
 
     if (range.start - 1 === 1 || range.end + 1 === length) {

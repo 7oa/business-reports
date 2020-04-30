@@ -105,14 +105,14 @@ export default class Table implements ITable {
         return this.view.getColumnTemplate(
           column.template
             ? this._generateColumnByTemplate(row, column.template)
-            : +row[column.field].toFixed(2)
+            : (+row[column.field].toFixed(2)).toString()
         );
       })
       .join("");
   }
 
-  _generateColumnByTemplate(el: object, template: any) {
-    const column = template.replace(/#[A-Za-z]+#/g, (str: string) => {
+  _generateColumnByTemplate(el: object, template: string) {
+    const column = template.replace(/#[A-Za-z]+#/g, (str) => {
       const field = str.replace(/#/g, "");
       return `${field === "image" ? imageLink + el[field] : el[field]}`;
     });
