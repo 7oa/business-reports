@@ -1,6 +1,4 @@
 import {
-  IPagination,
-  IFilter,
   IPaginationView,
   IPaginationModel,
   IFilterView,
