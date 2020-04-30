@@ -15,6 +15,9 @@ export interface IReport {
 
 export interface IReportView {
   tableSelector: string;
+  paginationSelector: string;
+  itemsPerPageSelector: string;
+  filterSelector: string;
   getTemplate(): string;
 }
 

@@ -10,14 +10,14 @@ import Filter from "../filter/filter";
 import FilterView from "../filter/filter-view";
 import FilterModel from "../filter/filter-model";
 import { Column, ReportProps } from "../interface/types";
-import { IReport, IData } from "../interface/interface";
+import { IReport, IData, IReportView } from "../interface/interface";
 
 export default class Report implements IReport {
   rootElement: HTMLElement;
   columns: Column[];
   itemsPerPage: number;
   data: IData;
-  view: ReportView;
+  view: IReportView;
   url: string;
 
   constructor(url: string, props: ReportProps) {
