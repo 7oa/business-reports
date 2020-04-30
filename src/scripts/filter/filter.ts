@@ -1,5 +1,5 @@
 import { IFilter, IFilterView, IFilterModel } from "../interface/interface";
-import { FilterProps, SelectedFilter, Filter as FilterType } from "../interface/types";
+import { FilterProps, SelectedFilter } from "../interface/types";
 
 export default class Filter implements IFilter {
   rootElement: HTMLElement;
@@ -84,7 +84,7 @@ export default class Filter implements IFilter {
     filterInputs.forEach((input: HTMLInputElement) => {
       const name = input.getAttribute("name");
       const currentFilter = filter.find((el) => el.name === name);
-      const title = this.getFilters().find((item: FilterType) => item.field === name).title;
+      const title = this.getFilters().find((item) => item.field === name).title;
       const value = input.value;
       const filterType = input.getAttribute("filter-type");
       if (value !== input[filterType]) {
@@ -100,41 +100,32 @@ export default class Filter implements IFilter {
 
   validation(input: HTMLInputElement) {
     const name = input.name;
-    const value = +input.value;
-    const filter = this.getFilters().find((f: FilterType) => f.field === input.name);
+    const currentValue = input.value ? input.value : 0;
+    const filter = this.getFilters().find((f) => f.field === input.name);
+    const filterType = input.getAttribute("filter-type");
+    let value: number;
 
-    if (value > +filter.max) {
-      input.value = filter.max.toString();
-    } else if (value < +filter.min) {
-      input.value = filter.min.toString();
-    } else {
-      if (input.classList.contains("min")) {
-        const maxValue = this.getMaxInputValue(name);
-        if (value > +maxValue) {
-          input.value = maxValue;
-        }
-      } else {
-        const minValue = this.getMinInputValue(name);
-        if (value < +minValue) {
-          input.value = minValue;
-        }
+    if (filterType === "min") {
+      value = +this.getInputValue(name, "max");
+      if (+currentValue > value) {
+        input.value = value.toString();
+      } else if (+currentValue <= filter.min) {
+        input.value = filter.min.toString();
       }
     }
-    if (input.value === "") {
-      input.value = "0";
+    if (filterType === "max") {
+      value = +this.getInputValue(name, "min");
+      if (+currentValue <= value) {
+        input.value = value.toString();
+      } else if (+currentValue > filter.max) {
+        input.value = filter.max.toString();
+      }
     }
   }
 
-  getMinInputValue(name: string) {
+  getInputValue(name: string, type: string) {
     const input: HTMLInputElement = this.rootElement.querySelector(
-      `.${this.view.filterInputSelector}.min[name=${name}]`
-    );
-    return input.value;
-  }
-
-  getMaxInputValue(name: string) {
-    const input: HTMLInputElement = this.rootElement.querySelector(
-      `.${this.view.filterInputSelector}.max[name=${name}]`
+      `.${this.view.filterInputSelector}[name=${name}][filter-type="${type}"]`
     );
     return input.value;
   }
@@ -161,7 +152,7 @@ export default class Filter implements IFilter {
     return this.model.filters;
   }
 
-  removeFilter(name) {
+  removeFilter(name: string) {
     this.model.removeFilter(name);
     this.rootElement.dispatchEvent(
       new CustomEvent("filterChange", {
