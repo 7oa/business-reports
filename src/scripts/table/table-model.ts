@@ -29,14 +29,14 @@ export default class TableModel implements ITableModel {
   }
 
   updateData() {
-    const sortedData = this.sortData([...this.initialData]);
+    const sortedData = this.sortData(this.initialData);
     this.data = this.filterData(sortedData);
   }
 
   sortData(data: object[]) {
     const field = this.sortField;
     const orderBy = this.sortOrder;
-    return orderBy ? data.sort(sortFunc(field, orderBy)) : data;
+    return orderBy ? [...data].sort(sortFunc(field, orderBy)) : [...data];
   }
 
   filterData(data: object[]) {
