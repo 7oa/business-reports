@@ -1,4 +1,13 @@
-import { data, dataSortAsc, dataSortDesc, dataFilter, dataFilter2 } from "../../../mocks/data";
+import {
+  data,
+  dataSortAsc,
+  dataSortDesc,
+  dataFilter,
+  dataFilter2,
+  dataPage1Items2,
+  dataPage2Items2,
+  dataPage2Items3,
+} from "../../../mocks/data";
 import TableModel from "./table-model";
 
 describe("TableModel", () => {
@@ -6,7 +15,7 @@ describe("TableModel", () => {
 
   beforeEach(() => {
     tableModel = new TableModel({
-      data: data,
+      data,
       itemsPerPage: 2,
     });
   });
@@ -105,5 +114,23 @@ describe("TableModel", () => {
     });
   });
 
-  // describe("getData", () => {});
+  describe("getData", () => {
+    it("return 2 items on page 1", () => {
+      expect(tableModel.getData()).toEqual(dataPage1Items2);
+    });
+    it("return 2 items on page 2", () => {
+      tableModel.currentPage = 2;
+      expect(tableModel.getData()).toEqual(dataPage2Items2);
+    });
+    it("return 3 items on page 2", () => {
+      tableModel.currentPage = 2;
+      tableModel.itemsPerPage = 3;
+      expect(tableModel.getData()).toEqual(dataPage2Items3);
+    });
+    it("return 100 items on page 1", () => {
+      tableModel.currentPage = 1;
+      tableModel.itemsPerPage = 100;
+      expect(tableModel.getData()).toEqual(data);
+    });
+  });
 });
