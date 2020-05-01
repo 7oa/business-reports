@@ -130,7 +130,7 @@ if (bisnessReports) {
 }
 
 if (productReports) {
-  new Report("../data/test.json", {
+  new Report("../data/product-data.json", {
     element: "#product-reports",
     itemsPerPage: 10,
     columns: productColumns,
