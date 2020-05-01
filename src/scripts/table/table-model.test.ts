@@ -20,7 +20,7 @@ describe("TableModel", () => {
     });
   });
 
-  describe("set TableModel props", () => {
+  describe("set props", () => {
     it("set data", () => {
       expect(tableModel.data).toEqual(data);
     });
@@ -53,16 +53,16 @@ describe("TableModel", () => {
   });
 
   describe("setFilter", () => {
-    it("filter set to []", () => {
+    it("set filter to []", () => {
       tableModel.setFilter([]);
       expect(tableModel.filter).toEqual([]);
     });
-    it("filter set to array with 1 object", () => {
+    it("set filter to array of 1 object", () => {
       const filter = [{ name: "age", title: "Age", min: "1", max: "20" }];
       tableModel.setFilter(filter);
       expect(tableModel.filter).toEqual(filter);
     });
-    it("filter set to array with 2 objects", () => {
+    it("set filter to array of 2 objects", () => {
       const filter = [
         { name: "id", title: "ID", min: "2", max: "122" },
         { name: "age", title: "Age", min: "1", max: "20" },
@@ -92,11 +92,11 @@ describe("TableModel", () => {
   });
 
   describe("filterData", () => {
-    it("age 23-100", () => {
+    it("should filter by age 23-100", () => {
       tableModel.filter = [{ name: "age", title: "Age", min: "23", max: "100" }];
       expect(tableModel.filterData(data)).toEqual(dataFilter);
     });
-    it("age 0-11", () => {
+    it("should filter by age 0-11", () => {
       tableModel.filter = [{ name: "age", title: "Age", min: "0", max: "11" }];
       expect(tableModel.filterData(data)).toEqual(dataFilter2);
     });
