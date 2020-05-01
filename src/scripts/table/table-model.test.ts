@@ -77,28 +77,28 @@ describe("TableModel", () => {
     it("without sort", () => {
       tableModel.sortField = "age";
       tableModel.sortOrder = "";
-      expect(tableModel.sortData(data)).toEqual(data);
+      expect(tableModel.sortData(tableModel.data)).toEqual(data);
     });
     it("sort asc", () => {
       tableModel.sortField = "age";
       tableModel.sortOrder = "asc";
-      expect(tableModel.sortData(data)).toEqual(dataSortAsc);
+      expect(tableModel.sortData(tableModel.data)).toEqual(dataSortAsc);
     });
     it("sort desc", () => {
       tableModel.sortField = "age";
       tableModel.sortOrder = "desc";
-      expect(tableModel.sortData(data)).toEqual(dataSortDesc);
+      expect(tableModel.sortData(tableModel.data)).toEqual(dataSortDesc);
     });
   });
 
   describe("filterData", () => {
     it("age 23-100", () => {
       tableModel.filter = [{ name: "age", title: "Age", min: "23", max: "100" }];
-      expect(tableModel.filterData(data)).toEqual(dataFilter);
+      expect(tableModel.filterData(tableModel.data)).toEqual(dataFilter);
     });
     it("age 0-11", () => {
       tableModel.filter = [{ name: "age", title: "Age", min: "0", max: "11" }];
-      expect(tableModel.filterData(data)).toEqual(dataFilter2);
+      expect(tableModel.filterData(tableModel.data)).toEqual(dataFilter2);
     });
   });
 
