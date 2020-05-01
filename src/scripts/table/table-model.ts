@@ -64,6 +64,7 @@ export default class TableModel implements ITableModel {
   getData() {
     const dataFrom = (this.currentPage - 1) * this.itemsPerPage;
     const dataTo = dataFrom + this.itemsPerPage;
+    console.log(JSON.stringify(this.data));
     return this.data.slice(dataFrom, dataTo);
   }
 }
