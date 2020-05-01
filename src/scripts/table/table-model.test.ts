@@ -1,10 +1,4 @@
-import {
-  simpleData,
-  simpleDataSortAsc,
-  simpleDataSortDesc,
-  simpleDataFilter,
-  simpleDataFilter2,
-} from "../../../mocks/simple";
+import { data, dataSortAsc, dataSortDesc, dataFilter, dataFilter2 } from "../../../mocks/data";
 import TableModel from "./table-model";
 
 describe("TableModel", () => {
@@ -12,20 +6,20 @@ describe("TableModel", () => {
 
   beforeEach(() => {
     tableModel = new TableModel({
-      data: simpleData,
-      itemsPerPage: 10,
+      data: data,
+      itemsPerPage: 2,
     });
   });
 
   describe("set TableModel props", () => {
     it("set data", () => {
-      expect(tableModel.data).toEqual(simpleData);
+      expect(tableModel.data).toEqual(data);
     });
     it("set initialData equal data", () => {
-      expect(tableModel.initialData).toEqual(simpleData);
+      expect(tableModel.initialData).toEqual(data);
     });
     it("set itemsPerPage", () => {
-      expect(tableModel.itemsPerPage).toEqual(10);
+      expect(tableModel.itemsPerPage).toEqual(2);
     });
     it("set currentPage", () => {
       expect(tableModel.currentPage).toEqual(1);
@@ -74,28 +68,28 @@ describe("TableModel", () => {
     it("without sort", () => {
       tableModel.sortField = "age";
       tableModel.sortOrder = "";
-      expect(tableModel.sortData(simpleData)).toEqual(simpleData);
+      expect(tableModel.sortData(data)).toEqual(data);
     });
     it("sort asc", () => {
       tableModel.sortField = "age";
       tableModel.sortOrder = "asc";
-      expect(tableModel.sortData(simpleData)).toEqual(simpleDataSortAsc);
+      expect(tableModel.sortData(data)).toEqual(dataSortAsc);
     });
     it("sort desc", () => {
       tableModel.sortField = "age";
       tableModel.sortOrder = "desc";
-      expect(tableModel.sortData(simpleData)).toEqual(simpleDataSortDesc);
+      expect(tableModel.sortData(data)).toEqual(dataSortDesc);
     });
   });
 
   describe("filterData", () => {
     it("age 23-100", () => {
       tableModel.filter = [{ name: "age", title: "Age", min: "23", max: "100" }];
-      expect(tableModel.filterData(simpleData)).toEqual(simpleDataFilter);
+      expect(tableModel.filterData(data)).toEqual(dataFilter);
     });
     it("age 0-11", () => {
       tableModel.filter = [{ name: "age", title: "Age", min: "0", max: "11" }];
-      expect(tableModel.filterData(simpleData)).toEqual(simpleDataFilter2);
+      expect(tableModel.filterData(data)).toEqual(dataFilter2);
     });
   });
 
