@@ -72,7 +72,6 @@ describe("TableModel", () => {
     });
   });
 
-  // describe("updateData", () => {});
   describe("sortData", () => {
     it("without sort", () => {
       tableModel.sortField = "age";
@@ -131,6 +130,22 @@ describe("TableModel", () => {
       tableModel.currentPage = 1;
       tableModel.itemsPerPage = 100;
       expect(tableModel.getData()).toEqual(data);
+    });
+  });
+
+  describe("spy updateData", () => {
+    beforeEach(function () {
+      spyOn(tableModel, "updateData");
+    });
+
+    it("updateData was called in setSort", function () {
+      tableModel.setSort("age", "asc");
+      expect(tableModel.updateData).toHaveBeenCalled();
+    });
+
+    it("updateData was called in setFilter", function () {
+      tableModel.setFilter([]);
+      expect(tableModel.updateData).toHaveBeenCalled();
     });
   });
 });
