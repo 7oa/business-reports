@@ -134,16 +134,16 @@ describe("TableModel", () => {
   });
 
   describe("spy updateData", () => {
-    beforeEach(function () {
+    beforeEach(() => {
       spyOn(tableModel, "updateData");
     });
 
-    it("updateData was called in setSort", function () {
+    it("updateData was called in setSort", () => {
       tableModel.setSort("age", "asc");
       expect(tableModel.updateData).toHaveBeenCalled();
     });
 
-    it("updateData was called in setFilter", function () {
+    it("updateData was called in setFilter", () => {
       tableModel.setFilter([]);
       expect(tableModel.updateData).toHaveBeenCalled();
     });
