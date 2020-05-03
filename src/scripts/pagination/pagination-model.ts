@@ -14,7 +14,7 @@ export default class PaginationModel implements IPaginationModel {
     return Math.ceil(this.dataLength / this.itemsPerPage);
   }
 
-  get pages() {
+  get pages(): (number | string)[] {
     const current = +this.currentPage;
     const length = +this.pageCount;
     const delta = 4;
