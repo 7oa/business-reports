@@ -1,6 +1,6 @@
 import PaginationModel from "./pagination-model";
 
-describe("FilterModel", () => {
+describe("PaginationModel", () => {
   let paginationModel: PaginationModel;
 
   describe("set props itemsPerPage: 2, dataLength: 3, page: 2", () => {
