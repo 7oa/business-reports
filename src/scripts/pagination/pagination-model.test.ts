@@ -76,4 +76,39 @@ describe("FilterModel", () => {
       expect(paginationModel.pages).toEqual([1, "...", 3, 4, 5, 6, 7, "...", 16]);
     });
   });
+
+  describe("setItemsPerPage", () => {
+    it("itemsPerPage shoud be 1, currentPage shoud be 1", () => {
+      paginationModel.setItemsPerPage(1);
+      expect(paginationModel.itemsPerPage).toEqual(1);
+      expect(paginationModel.currentPage).toEqual(1);
+    });
+    it("itemsPerPage shoud be 100, currentPage shoud be 1", () => {
+      paginationModel.setItemsPerPage(100);
+      expect(paginationModel.itemsPerPage).toEqual(100);
+      expect(paginationModel.currentPage).toEqual(1);
+    });
+  });
+
+  describe("setPage", () => {
+    it("page shoud be 10", () => {
+      paginationModel.setPage(10);
+      expect(paginationModel.currentPage).toEqual(10);
+    });
+    it("page shoud be 1", () => {
+      paginationModel.setPage(1);
+      expect(paginationModel.currentPage).toEqual(1);
+    });
+  });
+
+  describe("setDataLength", () => {
+    it("dataLength shoud be 100", () => {
+      paginationModel.setDataLength(100);
+      expect(paginationModel.dataLength).toEqual(100);
+    });
+    it("dataLength shoud be 22", () => {
+      paginationModel.setDataLength(22);
+      expect(paginationModel.dataLength).toEqual(22);
+    });
+  });
 });
