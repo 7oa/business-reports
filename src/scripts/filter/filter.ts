@@ -145,7 +145,7 @@ export default class Filter implements IFilter {
   }
 
   getFilter() {
-    return this.model.filter;
+    return this.model.selectedFilters;
   }
 
   getFilters() {

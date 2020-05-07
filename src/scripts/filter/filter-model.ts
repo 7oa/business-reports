@@ -2,7 +2,7 @@ import { IFilterModel } from "../interface/interface";
 import { SelectedFilter, Column } from "../interface/types";
 
 export default class FilterModel implements IFilterModel {
-  filter: SelectedFilter[] = [];
+  selectedFilters: SelectedFilter[] = [];
   data: object[];
   columns: Column[];
 
@@ -30,11 +30,11 @@ export default class FilterModel implements IFilterModel {
   }
 
   removeFilter(name: string) {
-    const filter = this.filter.filter((el) => el.name !== name);
+    const filter = this.selectedFilters.filter((el) => el.name !== name);
     this.setFilter(filter);
   }
 
   setFilter(filter: SelectedFilter[]) {
-    this.filter = filter;
+    this.selectedFilters = filter;
   }
 }

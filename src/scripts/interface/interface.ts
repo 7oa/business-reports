@@ -99,7 +99,7 @@ export interface IFilterView {
 export interface IFilterModel {
   data: object[];
   columns: Column[];
-  filter: SelectedFilter[];
+  selectedFilters: SelectedFilter[];
   filters: Filter[];
   setFilter(filter: SelectedFilter[]): void;
   removeFilter(name: string): void;
