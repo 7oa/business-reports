@@ -3,112 +3,71 @@ import PaginationModel from "./pagination-model";
 describe("PaginationModel", () => {
   let paginationModel: PaginationModel;
 
-  describe("set props itemsPerPage: 2, dataLength: 3, page: 2", () => {
-    beforeEach(() => {
+  describe("initialization", () => {
+    it("should return pageCount: 2, pages: [1,2] when itemsPerPage is 2, dataLength 3 and page is 2", () => {
       paginationModel = new PaginationModel({
         itemsPerPage: 2,
         dataLength: 3,
       });
+      expect(paginationModel.currentPage).toEqual(1);
       paginationModel.setPage(2);
-    });
-
-    it("set currentPage", () => {
       expect(paginationModel.currentPage).toEqual(2);
-    });
-
-    it("set pageCount", () => {
       expect(paginationModel.pageCount).toEqual(2);
-    });
-
-    it("set pages", () => {
       expect(paginationModel.pages).toEqual([1, 2]);
     });
-  });
 
-  describe("set props itemsPerPage: 10, dataLength: 87, page: 1", () => {
-    beforeEach(() => {
+    it("should return pageCount: 9, pages is contain dots when itemsPerPage is 10, dataLength 87 and page is 1", () => {
       paginationModel = new PaginationModel({
         itemsPerPage: 10,
         dataLength: 87,
       });
-    });
-
-    it("set pageCount", () => {
       expect(paginationModel.pageCount).toEqual(9);
+      expect(paginationModel.pages).toContain("...");
     });
 
-    it("set pages", () => {
-      expect(paginationModel.pages).toEqual([1, 2, 3, 4, 5, "...", 9]);
-    });
-  });
-
-  describe("set props itemsPerPage: 10, dataLength: 5, page: 1", () => {
-    beforeEach(() => {
+    it("should return pageCount: 1, pages: [1] when itemsPerPage is 10, dataLength 5 and page is 1", () => {
       paginationModel = new PaginationModel({
         itemsPerPage: 10,
         dataLength: 5,
       });
-    });
-
-    it("set pageCount", () => {
       expect(paginationModel.pageCount).toEqual(1);
-    });
-
-    it("set pages", () => {
       expect(paginationModel.pages).toEqual([1]);
     });
-  });
 
-  describe("set props itemsPerPage: 5, dataLength: 77, page: 5", () => {
-    beforeEach(() => {
+    it("should return pageCount: 16, pages: [1, '...', 3, 4, 5, 6, 7, '...', 16] when itemsPerPage is 5, dataLength 77 and page is 5", () => {
       paginationModel = new PaginationModel({
         itemsPerPage: 5,
         dataLength: 77,
       });
       paginationModel.setPage(5);
-    });
-
-    it("set pageCount", () => {
       expect(paginationModel.pageCount).toEqual(16);
+      expect(paginationModel.pages).toEqual([1, "...", 3, 4, 5, 6, 7, "...", 16]);
     });
 
-    it("set pages", () => {
-      expect(paginationModel.pages).toEqual([1, "...", 3, 4, 5, 6, 7, "...", 16]);
+    it("should return pageCount:0, pages: [] when dataLength is 0", () => {
+      paginationModel = new PaginationModel({
+        itemsPerPage: 5,
+        dataLength: 0,
+      });
+      expect(paginationModel.pageCount).toEqual(0);
+      expect(paginationModel.pages).toEqual([]);
     });
   });
 
   describe("setItemsPerPage", () => {
-    it("itemsPerPage shoud be 1, currentPage shoud be 1", () => {
-      paginationModel.setItemsPerPage(1);
-      expect(paginationModel.itemsPerPage).toEqual(1);
-      expect(paginationModel.currentPage).toEqual(1);
-    });
-    it("itemsPerPage shoud be 100, currentPage shoud be 1", () => {
-      paginationModel.setItemsPerPage(100);
-      expect(paginationModel.itemsPerPage).toEqual(100);
-      expect(paginationModel.currentPage).toEqual(1);
-    });
-  });
-
-  describe("setPage", () => {
-    it("page shoud be 10", () => {
+    it("should drop currentPage to 1", () => {
+      paginationModel = new PaginationModel({
+        itemsPerPage: 20,
+        dataLength: 3000,
+      });
       paginationModel.setPage(10);
       expect(paginationModel.currentPage).toEqual(10);
-    });
-    it("page shoud be 1", () => {
-      paginationModel.setPage(1);
+      paginationModel.setItemsPerPage(1);
       expect(paginationModel.currentPage).toEqual(1);
-    });
-  });
-
-  describe("setDataLength", () => {
-    it("dataLength shoud be 100", () => {
-      paginationModel.setDataLength(100);
-      expect(paginationModel.dataLength).toEqual(100);
-    });
-    it("dataLength shoud be 22", () => {
-      paginationModel.setDataLength(22);
-      expect(paginationModel.dataLength).toEqual(22);
+      paginationModel.setPage(10);
+      expect(paginationModel.currentPage).toEqual(10);
+      paginationModel.setItemsPerPage(100);
+      expect(paginationModel.currentPage).toEqual(1);
     });
   });
 });
