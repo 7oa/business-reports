@@ -49,7 +49,7 @@ export default class Report implements IReport {
         filterView: new FilterView(),
         filterModel: new FilterModel({
           data,
-          columns: this.columns.filter((el) => el.filter === true),
+          columns: this.columns,
         }),
       });
 
