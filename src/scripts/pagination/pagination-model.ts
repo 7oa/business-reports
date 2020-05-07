@@ -18,6 +18,9 @@ export default class PaginationModel implements IPaginationModel {
     const current = +this.currentPage;
     const length = +this.pageCount;
     const delta = 4;
+
+    if (!length) return [];
+
     const range = {
       start: Math.round(current - delta / 2),
       end: Math.round(current + delta / 2),
