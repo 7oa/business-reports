@@ -1,5 +1,11 @@
 import Data from "./data";
-import { data as promisedData } from "../../../mocks/data";
+
+const promisedData = [
+  { id: 1, name: "Patric", age: 67 },
+  { id: 2, name: "Elena", age: 23 },
+  { id: 3, name: "Simon", age: 11 },
+  { id: 4, name: "Gary", age: 22 },
+];
 
 describe("Data", () => {
   let data: Data;
