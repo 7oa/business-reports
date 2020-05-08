@@ -40,9 +40,11 @@ describe("TableModel", () => {
 
   describe("updateData", () => {
     it("should call sortData and filterData methods", () => {
-      // spyOn(tableModel, "sortData");
-      // tableModel.updateData();
-      // expect(tableModel.sortData).toHaveBeenCalled();
+      spyOn(tableModel, "sortData");
+      spyOn(tableModel, "filterData");
+      tableModel.updateData();
+      expect(tableModel.sortData).toHaveBeenCalled();
+      expect(tableModel.filterData).toHaveBeenCalled();
     });
   });
 
