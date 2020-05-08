@@ -106,11 +106,11 @@ export default class Filter implements IFilter {
 
     if (filterType === "min") {
       const currentMaxValue = +this.getInputValue(name, "max");
-      input.value = this.model.validationMin(+currentValue, currentMaxValue, filter.min);
+      input.value = this.model.validationMin(+currentValue, currentMaxValue, filter.min).toString();
     }
     if (filterType === "max") {
       const currentMinValue = +this.getInputValue(name, "min");
-      input.value = this.model.validationMax(+currentValue, currentMinValue, filter.max);
+      input.value = this.model.validationMax(+currentValue, currentMinValue, filter.max).toString();
     }
   }
 

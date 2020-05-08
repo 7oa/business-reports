@@ -103,6 +103,6 @@ export interface IFilterModel {
   filters: Filter[];
   setFilter(filter: SelectedFilter[]): void;
   removeFilter(name: string): void;
-  validationMin(currentValue: number, currentMaxValue: number, criticalMinValue: number): string;
-  validationMax(currentValue: number, currentMinValue: number, criticalMaxValue: number): string;
+  validationMin(currentValue: number, currentMaxValue: number, criticalMinValue: number): number;
+  validationMax(currentValue: number, currentMinValue: number, criticalMaxValue: number): number;
 }
