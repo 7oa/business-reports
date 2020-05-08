@@ -103,23 +103,14 @@ export default class Filter implements IFilter {
     const currentValue = input.value ? input.value : 0;
     const filter = this.getFilters().find((f) => f.field === input.name);
     const filterType = input.getAttribute("filter-type");
-    let value: number;
 
     if (filterType === "min") {
-      value = +this.getInputValue(name, "max");
-      if (+currentValue > value) {
-        input.value = value.toString();
-      } else if (+currentValue <= filter.min) {
-        input.value = filter.min.toString();
-      }
+      const currentMaxValue = +this.getInputValue(name, "max");
+      input.value = this.model.validationMin(+currentValue, currentMaxValue, filter.min);
     }
     if (filterType === "max") {
-      value = +this.getInputValue(name, "min");
-      if (+currentValue <= value) {
-        input.value = value.toString();
-      } else if (+currentValue > filter.max) {
-        input.value = filter.max.toString();
-      }
+      const currentMinValue = +this.getInputValue(name, "min");
+      input.value = this.model.validationMax(+currentValue, currentMinValue, filter.max);
     }
   }
 

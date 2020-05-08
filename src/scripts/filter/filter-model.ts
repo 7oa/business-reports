@@ -39,4 +39,24 @@ export default class FilterModel implements IFilterModel {
   setFilter(filter: SelectedFilter[]) {
     this.selectedFilters = filter;
   }
+
+  validationMin(currentValue: number, currentMaxValue: number, criticalMinValue: number): string {
+    if (currentValue > currentMaxValue) {
+      return currentMaxValue.toString();
+    } else if (currentValue <= criticalMinValue) {
+      return criticalMinValue.toString();
+    } else {
+      return currentValue.toString();
+    }
+  }
+
+  validationMax(currentValue: number, currentMinValue: number, criticalMaxValue: number): string {
+    if (currentValue <= currentMinValue) {
+      return currentMinValue.toString();
+    } else if (currentValue > criticalMaxValue) {
+      return criticalMaxValue.toString();
+    } else {
+      return currentValue.toString();
+    }
+  }
 }
