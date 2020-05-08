@@ -100,7 +100,41 @@ describe("FilterModel", () => {
     });
   });
 
-  // TODO: move validation to the filter model and cover it by tests
+  describe("validationMin", () => {
+    it("should return current value ia all parameters is equal", () => {
+      expect(filterModel.validationMin(0, 0, 0)).toEqual(0);
+    });
+
+    it("should return current value if it is less then current max value and bigger then critical min value", () => {
+      expect(filterModel.validationMin(100, 110, 10)).toEqual(100);
+    });
+
+    it("should return max value if the current value is bigger", () => {
+      expect(filterModel.validationMin(100, 10, 120)).toEqual(10);
+    });
+
+    it("should return critical min value if the current value is less", () => {
+      expect(filterModel.validationMin(0, 10, 120)).toEqual(120);
+    });
+  });
+
+  describe("validationMax", () => {
+    it("should return current value ia all parameters is equal", () => {
+      expect(filterModel.validationMax(0, 0, 0)).toEqual(0);
+    });
+
+    it("should return current min value if the current value is less", () => {
+      expect(filterModel.validationMax(100, 110, 10)).toEqual(110);
+    });
+
+    it("should return current value if it is bigger then current min value and less then critical max value", () => {
+      expect(filterModel.validationMax(100, 10, 120)).toEqual(100);
+    });
+
+    it("should return critical max value if the current value is bigger", () => {
+      expect(filterModel.validationMax(130, 10, 120)).toEqual(120);
+    });
+  });
 });
 
 let data = [
